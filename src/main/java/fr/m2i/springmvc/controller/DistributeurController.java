@@ -1,8 +1,10 @@
 
 package fr.m2i.springmvc.controller;
 
-import fr.m2i.springmvc.form.BuyForm;
-import fr.m2i.springmvc.form.ProductForm;
+import fr.m2i.springmvc.exception.InsufficientBalanceException;
+import fr.m2i.springmvc.exception.NotEnoughStockException;
+import fr.m2i.springmvc.exception.NotFoundException;
+import fr.m2i.springmvc.form.BuyProductForm;
 import fr.m2i.springmvc.form.UserBalanceForm;
 import fr.m2i.springmvc.model.Product;
 import fr.m2i.springmvc.service.ProductService;
@@ -45,24 +47,51 @@ public class DistributeurController {
         try {
             userService.addBalance(userBalanceForm.getBalance());
             return "redirect:distributeur";
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             result.rejectValue("balance", null, "Une erreur est survenue lors de l'ajout de crédit");
             return "distributeur";
         }
     }
 
+    @PostMapping("/buyProduct")
+    public String buyProduct(@ModelAttribute("buyProductForm") @Valid BuyProductForm buyProductForm,
+            BindingResult result) {
+        
+        if (result.hasErrors()) {
+            return "distributeur";
+        }
+        
+        String errorMessage;
+
+        try {
+            productService.buyProduct(buyProductForm.getId());
+            return "redirect:distributeur";
+        } catch (NotFoundException nfe) {
+            errorMessage = "Le produit demandé n'existe pas";
+        } catch (NotEnoughStockException nese) {
+            errorMessage = "Le produit demandé n'est plus en stock";
+        } catch (InsufficientBalanceException ibe) {
+            errorMessage = "Vous manquez de crédit pour le produit demandé";
+        } catch (Exception e) {
+            errorMessage = "Une erreur est survenue lors de l'achat";
+        }
+
+        result.rejectValue("id", null, errorMessage);
+        return "distributeur";
+    }
+    
     @ModelAttribute("balance")
     public Double addBalanceBean() {
         try {
             return userService.getBalance();
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             // log user not found
             return 0.0;
         }
     }
 
     @ModelAttribute("products")
-    public List<Product> addProductsBean() throws Exception {
+    public List<Product> addProductsBean() {
         try {
             return productService.findAll();
         } catch (Exception e) {
@@ -75,4 +104,10 @@ public class DistributeurController {
     public UserBalanceForm addUserBalanceFormBean() {
         return new UserBalanceForm();
     }
+
+    @ModelAttribute("buyProductForm")
+    public BuyProductForm addBuyProductFormBean() {
+        return new BuyProductForm();
+    }
+    
 }
