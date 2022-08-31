@@ -1,24 +1,25 @@
 
 package fr.m2i.springmvc.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="products")
+@Table(name = "products")
 public class Product {
-    
+
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Long id ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
-    @Column(name= "name" , length = 100)
-    private String name ;
-    
-    @Column(name = "price")
-    private Double price ;
-    
-    @Column(name = "quantity")
-    private Integer quantity ;
+    private String name;
+
+    private Double price;
+
+    private Integer quantity;
 
     public Long getId() {
         return id;
@@ -51,6 +52,4 @@ public class Product {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-    
-    
 }

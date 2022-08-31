@@ -1,4 +1,3 @@
-
 package fr.m2i.springmvc.model;
 
 import javax.persistence.*;
@@ -6,13 +5,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
-    
-    @Column(name="balance")
-    private Double balance ;
+    private Long id;
+
+    @Column(name = "balance")
+    private Double balance;
 
     public Long getId() {
         return id;
@@ -29,6 +28,4 @@ public class User {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-    
-    
 }

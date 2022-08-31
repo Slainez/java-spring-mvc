@@ -5,10 +5,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
-public class UserForm {
+public class UserBalanceForm {
     
-    @NotNull(message= "This field is mandatory")
-    @Min(value = 0 , message = "Vous devez ajouter au moins 1 credit ")
+   @Min(value = 1, message = "Le montant que vous souhaitez ajouter doit être positif")
+   @NotNull(message = "Le champs 'montant' est obligatoire")
     private Double balance ;
 
     public Double getBalance() {
