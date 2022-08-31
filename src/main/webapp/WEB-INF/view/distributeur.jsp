@@ -8,7 +8,7 @@
 
     <html>
         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>           
             <title>Distributeur</title>
         </head>
         <body>
@@ -35,22 +35,22 @@
                             
             </table>
             
-            
-            <h2>Ajout de crédit </h2>
-            
             <form:form method="POST"  action="/addBalance"  modelAttribute="userForm" >
-                <form:label path="balance">Saisissez le nombre de credit a ajouter :</form:label>
+                 <fieldset>
+                        <legend>Ajout de crédit </legend>
+                <form:label path="balance">Montant :</form:label>
                 <br>
                 <form:input path="balance" type="number" />
                 <form:errors path="balance" />
                 
                 <input type="submit" value="Ajouter">
+                 </fieldset>
             </form:form>
                 
-                
-             <h2>Creation d'un produit </h2>  
-             
+            
             <form:form method="POST"  action="/addProducts"  modelAttribute="productForm" >
+                 <fieldset>
+                        <legend>Création de produit</legend>
                 <form:label path="name">Nom :</form:label>
                 <br>
                 <form:input path="name" type="text" />
@@ -67,24 +67,34 @@
                 <form:errors path="quantity" />
                 <br>
                 <input type="submit" value="Ajouter">
+                 </fieldset>
             </form:form>
                 
                 
                 
-                <h2>Achat de produit</h2>
+                
+                
                 <form:form method="POST"  action="/buyProducts" modelAttribute="buyForm"  >
+                    <fieldset>
+                        <legend>Achat de produit</legend>
                     <form:label path="id"> Choisissez votre produit :</form:label>
                     <br>
-                    <form:select path="id" multiple="false" >
-                        
-                            <form:options items="${products.id}"   />
-                        
-                        
-                    </form:select>                    
+                    
+                    
+                    <form:select path="id" multiple="false" > 
+                        <c:forEach items = "${products}" var="product" >
+                            <c:if test="${product.quantity > 0}">
+                            <form:option   value="${product.id}"  label="${product.name}"  />   
+                            </c:if>
+                        </c:forEach>
+                    </form:select> 
+                    
                     <form:errors path="id" />
                    
                     <br>
                     <input type="submit" value="Acheter">
+                    
+                    </fieldset> 
                </form:form>
          
         </body>
